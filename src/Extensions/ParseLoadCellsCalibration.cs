@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Collections.ObjectModel;
+using AindForceForagingDataSchema.Rig;
 
 [Combinator]
-[Description("Parses a sequence of Tuple<Offset, Baseline, LoadCellIndex> into a LoadCellsCalibrations object.")]
+[Description("Parses LoadCell calibration data into a LoadCellsCalibrations object.")]
 [WorkflowElementCategory(ElementCategory.Transform)]
 public class ParseLoadCellsCalibration
 {
@@ -27,6 +28,24 @@ public class ParseLoadCellsCalibration
             return calibrations;
         });
     }
+
+    public IObservable<LoadCellsCalibrations> Process(IObservable<IEnumerable<LoadCellCalibrationOutput>> source)
+    {
+        return source.Select(value => {
+            var calibrations = new LoadCellsCalibrations();
+            foreach (var calibration in value)
+            {
+                calibrations.Add(new LoadCellCalibration
+                {
+                    Offset = calibration.Offset.HasValue ? calibration.Offset.Value : 0,
+                    Baseline = (int)(calibration.Baseline.HasValue ? calibration.Baseline.Value : 0),
+                    LoadCellIndex = calibration.Channel
+                });
+            }
+            return calibrations;
+        });
+    }
+
 }
 
 

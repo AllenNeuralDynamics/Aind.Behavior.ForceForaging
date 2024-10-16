@@ -14,7 +14,7 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-  "aind_behavior_services@git+https://github.com/AllenNeuralDynamics/Aind.Behavior.Services@0.7.14",
+  "aind_behavior_services>=0.8.0",
 ]
 
 [project.optional-dependencies]
@@ -23,6 +23,8 @@ linters = [
     'ruff',
     'codespell'
 ]
+
+launcher = ["aind_behavior_experiment_launcher[aind-services]<0.2.0"]
 
 docs = [
     'Sphinx<7.3',
@@ -38,7 +40,7 @@ where = ["src/DataSchemas"]
 
 [tool.setuptools.dynamic]
 version = {attr = "aind_behavior_force_foraging.__version__"}
-readme = {file = ["README.md"]}
+readme = {file = "README.md", content-type = "text/markdown"}
 
 [tool.ruff]
 line-length = 120

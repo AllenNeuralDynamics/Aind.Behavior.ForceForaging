@@ -28,10 +28,6 @@ class AindManipulatorDevice(aind_manipulator.AindManipulatorDevice):
     )
 
 
-class HarpLoadCells(rig.HarpLoadCells):
-    calibration: lcc.LoadCellsCalibration = Field(..., description="Load cells calibration")
-
-
 class RigCalibration(BaseModel):
     water_valve: wvc.WaterValveCalibration = Field(default=..., description="Water valve calibration")
 
@@ -46,7 +42,7 @@ class AindForceForagingRig(AindBehaviorRigModel):
     )
     harp_behavior: rig.HarpBehavior = Field(..., description="Harp behavior")
     harp_lickometer: rig.HarpLickometer = Field(..., description="Harp lickometer")
-    harp_load_cells: HarpLoadCells = Field(..., description="Harp load cells")
+    harp_load_cells: lcc.LoadCells = Field(..., description="Harp load cells")
     harp_clock_generator: rig.HarpClockGenerator = Field(..., description="Harp clock generator")
     harp_clock_repeaters: List[rig.HarpClockGenerator] = Field(default=[], description="Harp clock repeaters")
     harp_analog_input: Optional[rig.HarpAnalogInput] = Field(default=None, description="Harp analog input")

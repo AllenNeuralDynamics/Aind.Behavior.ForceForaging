@@ -458,6 +458,202 @@
       "title": "CameraController[WebCamera]",
       "type": "object"
     },
+    "DisplayCalibration": {
+      "properties": {
+        "intrinsics": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/DisplayIntrinsics"
+            }
+          ],
+          "default": {
+            "frame_width": 1920,
+            "frame_height": 1080,
+            "display_width": 20.0,
+            "display_height": 15.0
+          },
+          "description": "Intrinsics"
+        },
+        "extrinsics": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/DisplayExtrinsics"
+            }
+          ],
+          "default": {
+            "rotation": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "translation": {
+              "x": 0.0,
+              "y": 1.309016,
+              "z": -13.27
+            }
+          },
+          "description": "Extrinsics"
+        }
+      },
+      "title": "DisplayCalibration",
+      "type": "object"
+    },
+    "DisplayExtrinsics": {
+      "properties": {
+        "rotation": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Vector3"
+            }
+          ],
+          "default": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "description": "Rotation vector (radians)"
+        },
+        "translation": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Vector3"
+            }
+          ],
+          "default": {
+            "x": 0.0,
+            "y": 1.309016,
+            "z": -13.27
+          },
+          "description": "Translation (in cm)"
+        }
+      },
+      "title": "DisplayExtrinsics",
+      "type": "object"
+    },
+    "DisplayIntrinsics": {
+      "properties": {
+        "frame_width": {
+          "default": 1920,
+          "description": "Frame width (px)",
+          "minimum": 0,
+          "title": "Frame Width",
+          "type": "integer"
+        },
+        "frame_height": {
+          "default": 1080,
+          "description": "Frame height (px)",
+          "minimum": 0,
+          "title": "Frame Height",
+          "type": "integer"
+        },
+        "display_width": {
+          "default": 20,
+          "description": "Display width (cm)",
+          "minimum": 0.0,
+          "title": "Display Width",
+          "type": "number"
+        },
+        "display_height": {
+          "default": 15,
+          "description": "Display width (cm)",
+          "minimum": 0.0,
+          "title": "Display Height",
+          "type": "number"
+        }
+      },
+      "title": "DisplayIntrinsics",
+      "type": "object"
+    },
+    "DisplaysCalibration": {
+      "properties": {
+        "left": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/DisplayCalibration"
+            }
+          ],
+          "default": {
+            "intrinsics": {
+              "display_height": 15.0,
+              "display_width": 20.0,
+              "frame_height": 1080,
+              "frame_width": 1920
+            },
+            "extrinsics": {
+              "rotation": {
+                "x": 0.0,
+                "y": 1.0472,
+                "z": 0.0
+              },
+              "translation": {
+                "x": -16.6917756,
+                "y": 1.309016,
+                "z": -3.575264
+              }
+            }
+          },
+          "description": "Left display calibration"
+        },
+        "center": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/DisplayCalibration"
+            }
+          ],
+          "default": {
+            "intrinsics": {
+              "display_height": 15.0,
+              "display_width": 20.0,
+              "frame_height": 1080,
+              "frame_width": 1920
+            },
+            "extrinsics": {
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "translation": {
+                "x": 0.0,
+                "y": 1.309016,
+                "z": -13.27
+              }
+            }
+          },
+          "description": "Center display calibration"
+        },
+        "right": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/DisplayCalibration"
+            }
+          ],
+          "default": {
+            "intrinsics": {
+              "display_height": 15.0,
+              "display_width": 20.0,
+              "frame_height": 1080,
+              "frame_width": 1920
+            },
+            "extrinsics": {
+              "rotation": {
+                "x": 0.0,
+                "y": -1.0472,
+                "z": 0.0
+              },
+              "translation": {
+                "x": 16.6917756,
+                "y": 1.309016,
+                "z": -3.575264
+              }
+            }
+          },
+          "description": "Right display calibration"
+        }
+      },
+      "title": "DisplaysCalibration",
+      "type": "object"
+    },
     "HarpAnalogInput": {
       "properties": {
         "device_type": {
@@ -710,7 +906,90 @@
       "title": "HarpLickometer",
       "type": "object"
     },
-    "HarpLoadCells": {
+    "LoadCellCalibrationInput": {
+      "properties": {
+        "channel": {
+          "description": "Load cell channel number available",
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Load cell channel number",
+          "type": "integer"
+        },
+        "offset_measurement": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredOffset"
+          },
+          "title": "Load cell offset calibration data",
+          "type": "array"
+        },
+        "weight_measurement": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredWeight"
+          },
+          "title": "Load cell weight calibration data",
+          "type": "array"
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "title": "LoadCellCalibrationInput",
+      "type": "object"
+    },
+    "LoadCellCalibrationOutput": {
+      "properties": {
+        "channel": {
+          "description": "Load cell channel number available",
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Channel",
+          "type": "integer"
+        },
+        "offset": {
+          "default": null,
+          "oneOf": [
+            {
+              "description": "Load cell offset value [-255, 255]",
+              "maximum": 255,
+              "minimum": -255,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Load cell offset"
+        },
+        "baseline": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Load cell baseline"
+        },
+        "weight_lookup": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredWeight"
+          },
+          "title": "Load cell weight lookup calibration table",
+          "type": "array"
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "title": "LoadCellCalibrationOutput",
+      "type": "object"
+    },
+    "LoadCells": {
       "properties": {
         "device_type": {
           "const": "loadcells",
@@ -731,12 +1010,16 @@
           ]
         },
         "calibration": {
-          "allOf": [
+          "default": null,
+          "oneOf": [
             {
               "$ref": "#/definitions/LoadCellsCalibration"
+            },
+            {
+              "type": "null"
             }
           ],
-          "description": "Load cells calibration"
+          "title": "Calibration of the load cells"
         },
         "who_am_i": {
           "const": 1232,
@@ -764,42 +1047,9 @@
         }
       },
       "required": [
-        "calibration",
         "port_name"
       ],
-      "title": "HarpLoadCells",
-      "type": "object"
-    },
-    "LoadCellCalibration": {
-      "properties": {
-        "measured_offset": {
-          "additionalProperties": {
-            "type": "number"
-          },
-          "default": {},
-          "title": "Load cells offset. Each entry is expected to be in the format of: Channel : (offset, baseline)",
-          "type": "object"
-        },
-        "measured_weight": {
-          "default": {},
-          "items": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "type": "array"
-          },
-          "title": "Load cells measured weight. Each entry is expected to be in the format of: (known weight(g), baseline)",
-          "type": "array"
-        }
-      },
-      "title": "LoadCellCalibration",
+      "title": "LoadCells",
       "type": "object"
     },
     "LoadCellsCalibration": {
@@ -869,12 +1119,12 @@
     "LoadCellsCalibrationInput": {
       "properties": {
         "channels": {
-          "additionalProperties": {
-            "$ref": "#/definitions/LoadCellCalibration"
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/LoadCellCalibrationInput"
           },
-          "default": {},
           "title": "Load cells calibration data",
-          "type": "object"
+          "type": "array"
         }
       },
       "title": "LoadCellsCalibrationInput",
@@ -882,60 +1132,13 @@
     },
     "LoadCellsCalibrationOutput": {
       "properties": {
-        "offset": {
-          "additionalProperties": {
-            "description": "Load cell offset value [-255, 255]",
-            "maximum": 255,
-            "minimum": -255,
-            "type": "integer"
+        "channels": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/LoadCellCalibrationOutput"
           },
-          "default": {
-            "0": 0,
-            "1": 0,
-            "2": 0,
-            "3": 0,
-            "4": 0,
-            "5": 0,
-            "6": 0,
-            "7": 0
-          },
-          "title": "Load cells offset",
-          "type": "object"
-        },
-        "baseline": {
-          "additionalProperties": {
-            "type": "number"
-          },
-          "default": {
-            "0": 0,
-            "1": 0,
-            "2": 0,
-            "3": 0,
-            "4": 0,
-            "5": 0,
-            "6": 0,
-            "7": 0
-          },
-          "title": "Load cells baseline to be subtracted from the raw data after applying the offset.",
-          "type": "object"
-        },
-        "weight_lookup": {
-          "additionalProperties": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "type": "array"
-          },
-          "default": {},
-          "title": "Load cells lookup calibration table for each channel: (weight, baseline).",
-          "type": "object"
+          "title": "Load cells calibration output",
+          "type": "array"
         }
       },
       "title": "LoadCellsCalibrationOutput",
@@ -967,6 +1170,48 @@
         "z"
       ],
       "title": "ManipulatorPosition",
+      "type": "object"
+    },
+    "MeasuredOffset": {
+      "properties": {
+        "offset": {
+          "description": "The applied offset resistor value[-255, 255]",
+          "maximum": 255,
+          "minimum": -255,
+          "title": "Offset",
+          "type": "integer"
+        },
+        "baseline": {
+          "description": "The measured baseline value",
+          "title": "Baseline",
+          "type": "number"
+        }
+      },
+      "required": [
+        "offset",
+        "baseline"
+      ],
+      "title": "MeasuredOffset",
+      "type": "object"
+    },
+    "MeasuredWeight": {
+      "properties": {
+        "weight": {
+          "description": "The applied weight in grams",
+          "title": "Weight",
+          "type": "number"
+        },
+        "baseline": {
+          "description": "The measured baseline value",
+          "title": "Baseline",
+          "type": "number"
+        }
+      },
+      "required": [
+        "weight",
+        "baseline"
+      ],
+      "title": "MeasuredWeight",
       "type": "object"
     },
     "Measurement": {
@@ -1038,6 +1283,40 @@
         "Dynamic"
       ]
     },
+    "Rect": {
+      "properties": {
+        "x": {
+          "default": 0,
+          "description": "X coordinate of the top-left corner",
+          "minimum": 0,
+          "title": "X",
+          "type": "integer"
+        },
+        "y": {
+          "default": 0,
+          "description": "Y coordinate of the top-left corner",
+          "minimum": 0,
+          "title": "Y",
+          "type": "integer"
+        },
+        "width": {
+          "default": 0,
+          "description": "Width of the rectangle",
+          "minimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "default": 0,
+          "description": "Height of the rectangle",
+          "minimum": 0,
+          "title": "Height",
+          "type": "integer"
+        }
+      },
+      "title": "Rect",
+      "type": "object"
+    },
     "RigCalibration": {
       "properties": {
         "water_valve": {
@@ -1077,16 +1356,74 @@
           ]
         },
         "calibration": {
-          "default": null,
-          "description": "Calibration",
-          "oneOf": [
+          "allOf": [
             {
-              "$ref": "#/definitions/BaseModel"
-            },
-            {
-              "type": "null"
+              "$ref": "#/definitions/DisplaysCalibration"
             }
-          ]
+          ],
+          "default": {
+            "left": {
+              "extrinsics": {
+                "rotation": {
+                  "x": 0.0,
+                  "y": 1.0472,
+                  "z": 0.0
+                },
+                "translation": {
+                  "x": -16.6917756,
+                  "y": 1.309016,
+                  "z": -3.575264
+                }
+              },
+              "intrinsics": {
+                "display_height": 15.0,
+                "display_width": 20.0,
+                "frame_height": 1080,
+                "frame_width": 1920
+              }
+            },
+            "center": {
+              "extrinsics": {
+                "rotation": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "translation": {
+                  "x": 0.0,
+                  "y": 1.309016,
+                  "z": -13.27
+                }
+              },
+              "intrinsics": {
+                "display_height": 15.0,
+                "display_width": 20.0,
+                "frame_height": 1080,
+                "frame_width": 1920
+              }
+            },
+            "right": {
+              "extrinsics": {
+                "rotation": {
+                  "x": 0.0,
+                  "y": -1.0472,
+                  "z": 0.0
+                },
+                "translation": {
+                  "x": 16.6917756,
+                  "y": 1.309016,
+                  "z": -3.575264
+                }
+              },
+              "intrinsics": {
+                "display_height": 15.0,
+                "display_width": 20.0,
+                "frame_height": 1080,
+                "frame_width": 1920
+              }
+            }
+          },
+          "description": "Screen calibration"
         },
         "display_index": {
           "default": 1,
@@ -1105,12 +1442,6 @@
           "description": "Target update frequency",
           "title": "Target Update Frequency",
           "type": "number"
-        },
-        "calibration_directory": {
-          "default": "Calibration\\Monitors\\",
-          "description": "Calibration directory",
-          "title": "Calibration Directory",
-          "type": "string"
         },
         "texture_assets_directory": {
           "default": "Textures",
@@ -1207,6 +1538,46 @@
           "title": "Gain",
           "type": "number"
         },
+        "gamma": {
+          "default": null,
+          "description": "Gamma. If None, will disable gamma correction.",
+          "oneOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gamma"
+        },
+        "adc_bit_depth": {
+          "default": 0,
+          "description": "ADC bit depth. If None will be left as default.",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/SpinnakerCameraAdcBitDepth"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "region_of_interest": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Rect"
+            }
+          ],
+          "default": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "description": "Region of interest"
+        },
         "video_writer": {
           "default": null,
           "description": "Video writer. If not provided, no video will be saved.",
@@ -1224,6 +1595,44 @@
         "serial_number"
       ],
       "title": "SpinnakerCamera",
+      "type": "object"
+    },
+    "SpinnakerCameraAdcBitDepth": {
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "title": "SpinnakerCameraAdcBitDepth",
+      "type": "integer",
+      "x-enumNames": [
+        "Adc8bit",
+        "Adc10bit",
+        "Adc12bit"
+      ]
+    },
+    "Vector3": {
+      "properties": {
+        "x": {
+          "default": 0,
+          "description": "X coordinate of the point",
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "default": 0,
+          "description": "Y coordinate of the point",
+          "title": "Y",
+          "type": "number"
+        },
+        "z": {
+          "default": 0,
+          "description": "Z coordinate of the point",
+          "title": "Z",
+          "type": "number"
+        }
+      },
+      "title": "Vector3",
       "type": "object"
     },
     "VideoWriter": {
@@ -1266,9 +1675,15 @@
           "type": "string"
         },
         "output_arguments": {
-          "default": "-c:v hevc_nvenc -pix_fmt x2rgb10le -color_range full -tune hq -preset p3 -rc vbr -cq 16 -rc-lookahead 56 -temporal-aq 1 -qmin 0 -qmax 10",
+          "default": "-vf \"scale=out_color_matrix=bt709:out_range=full\" -c:v h264_nvenc -pix_fmt nv12 -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author=\"Allen Institute for Neural Dynamics\" -maxrate 700M -bufsize 350M",
           "description": "Output arguments",
           "title": "Output Arguments",
+          "type": "string"
+        },
+        "input_arguments": {
+          "default": "-v verbose -colorspace rgb -color_primaries bt709 -color_trc linear",
+          "description": "Input arguments",
+          "title": "Input Arguments",
           "type": "string"
         }
       },
@@ -1514,6 +1929,12 @@
     }
   },
   "properties": {
+    "aind_behavior_services_pkg_version": {
+      "default": "0.8.1",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "title": "aind_behavior_services package version",
+      "type": "string"
+    },
     "version": {
       "const": "0.2.0",
       "default": "0.2.0",
@@ -1569,7 +1990,7 @@
     "harp_load_cells": {
       "allOf": [
         {
-          "$ref": "#/definitions/HarpLoadCells"
+          "$ref": "#/definitions/LoadCells"
         }
       ],
       "description": "Harp load cells"
@@ -1620,11 +2041,71 @@
       "default": {
         "device_type": "Screen",
         "additional_settings": null,
-        "calibration": null,
+        "calibration": {
+          "center": {
+            "extrinsics": {
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "translation": {
+                "x": 0.0,
+                "y": 1.309016,
+                "z": -13.27
+              }
+            },
+            "intrinsics": {
+              "display_height": 15.0,
+              "display_width": 20.0,
+              "frame_height": 1080,
+              "frame_width": 1920
+            }
+          },
+          "left": {
+            "extrinsics": {
+              "rotation": {
+                "x": 0.0,
+                "y": 1.0472,
+                "z": 0.0
+              },
+              "translation": {
+                "x": -16.6917756,
+                "y": 1.309016,
+                "z": -3.575264
+              }
+            },
+            "intrinsics": {
+              "display_height": 15.0,
+              "display_width": 20.0,
+              "frame_height": 1080,
+              "frame_width": 1920
+            }
+          },
+          "right": {
+            "extrinsics": {
+              "rotation": {
+                "x": 0.0,
+                "y": -1.0472,
+                "z": 0.0
+              },
+              "translation": {
+                "x": 16.6917756,
+                "y": 1.309016,
+                "z": -3.575264
+              }
+            },
+            "intrinsics": {
+              "display_height": 15.0,
+              "display_width": 20.0,
+              "frame_height": 1080,
+              "frame_width": 1920
+            }
+          }
+        },
         "display_index": 1,
         "target_render_frequency": 60.0,
         "target_update_frequency": 120.0,
-        "calibration_directory": "Calibration\\Monitors\\",
         "texture_assets_directory": "Textures",
         "brightness": 0.0,
         "contrast": 1.0

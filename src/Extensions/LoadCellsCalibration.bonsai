@@ -10,7 +10,6 @@
                  xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:p3="clr-namespace:;assembly=Extensions"
-                 xmlns:p4="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -624,192 +623,11 @@
         <Selector>HarpLoadCells.Calibration.Output</Selector>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
-      <Expression xsi:type="rx:SelectMany">
-        <Name>LoadFromSchema</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="WorkflowInput">
-              <Name>Source1</Name>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Take">
-                <rx:Count>1</rx:Count>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="rx:AsyncSubject">
-              <Name>value</Name>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>value</Name>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>Offset</Selector>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Merge" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:CombineLatest" />
-            </Expression>
-            <Expression xsi:type="rx:CreateObservable">
-              <Name>Unpack</Name>
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Take">
-                      <rx:Count>1</rx:Count>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="rx:AsyncSubject">
-                    <Name>this</Name>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>this</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Item2</Selector>
-                  </Expression>
-                  <Expression xsi:type="rx:AsyncSubject">
-                    <Name>thisOffset</Name>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>this</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Item1</Selector>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Baseline</Selector>
-                  </Expression>
-                  <Expression xsi:type="rx:AsyncSubject">
-                    <Name>allBaselines</Name>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>thisOffset</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Value</Selector>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>allBaselines</Name>
-                  </Expression>
-                  <Expression xsi:type="rx:Condition">
-                    <Name>HasLoadCellBaseline?</Name>
-                    <Workflow>
-                      <Nodes>
-                        <Expression xsi:type="WorkflowInput">
-                          <Name>Source1</Name>
-                        </Expression>
-                        <Expression xsi:type="SubscribeSubject">
-                          <Name>thisOffset</Name>
-                        </Expression>
-                        <Expression xsi:type="MemberSelector">
-                          <Selector>Key</Selector>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="Key" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p4:ContainsKey" />
-                        </Expression>
-                        <Expression xsi:type="WorkflowOutput" />
-                      </Nodes>
-                      <Edges>
-                        <Edge From="0" To="4" Label="Source1" />
-                        <Edge From="1" To="2" Label="Source1" />
-                        <Edge From="2" To="3" Label="Source1" />
-                        <Edge From="3" To="4" Label="Source2" />
-                        <Edge From="4" To="5" Label="Source1" />
-                      </Edges>
-                    </Workflow>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>thisOffset</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Key</Selector>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Value" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="Index">
-                    <Operand xsi:type="StringProperty">
-                      <Value />
-                    </Operand>
-                  </Expression>
-                  <Expression xsi:type="scr:ExpressionTransform">
-                    <scr:Expression>int32(it)</scr:Expression>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>thisOffset</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Key</Selector>
-                  </Expression>
-                  <Expression xsi:type="Parse">
-                    <Pattern>%i</Pattern>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Zip" />
-                  </Expression>
-                  <Expression xsi:type="WorkflowOutput" />
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="3" To="4" Label="Source1" />
-                  <Edge From="4" To="5" Label="Source1" />
-                  <Edge From="6" To="7" Label="Source1" />
-                  <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="8" To="9" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source1" />
-                  <Edge From="11" To="22" Label="Source1" />
-                  <Edge From="12" To="13" Label="Source1" />
-                  <Edge From="13" To="17" Label="Source1" />
-                  <Edge From="14" To="15" Label="Source1" />
-                  <Edge From="15" To="16" Label="Source1" />
-                  <Edge From="16" To="17" Label="Source2" />
-                  <Edge From="17" To="18" Label="Source1" />
-                  <Edge From="18" To="22" Label="Source2" />
-                  <Edge From="19" To="20" Label="Source1" />
-                  <Edge From="20" To="21" Label="Source1" />
-                  <Edge From="21" To="22" Label="Source3" />
-                  <Edge From="22" To="23" Label="Source1" />
-                </Edges>
-              </Workflow>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Merge" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:ToList" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:ParseLoadCellsCalibration" />
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="3" To="4" Label="Source1" />
-            <Edge From="3" To="6" Label="Source1" />
-            <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="6" Label="Source2" />
-            <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source1" />
-            <Edge From="8" To="9" Label="Source1" />
-            <Edge From="9" To="10" Label="Source1" />
-            <Edge From="10" To="11" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Channels</Selector>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p3:ParseLoadCellsCalibration" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Merge" />
@@ -900,16 +718,17 @@
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
-      <Edge From="1" To="6" Label="Source1" />
+      <Edge From="1" To="7" Label="Source1" />
       <Edge From="2" To="3" Label="Source1" />
       <Edge From="3" To="4" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
-      <Edge From="5" To="6" Label="Source2" />
-      <Edge From="6" To="7" Label="Source1" />
-      <Edge From="7" To="10" Label="Source1" />
-      <Edge From="8" To="9" Label="Source1" />
-      <Edge From="9" To="10" Label="Source2" />
-      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="7" Label="Source2" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="11" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="10" To="11" Label="Source2" />
+      <Edge From="12" To="13" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

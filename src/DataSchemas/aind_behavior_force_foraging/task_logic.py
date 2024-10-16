@@ -8,7 +8,7 @@ import aind_behavior_services.task_logic.distributions as distributions
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 from pydantic import BaseModel, Field, RootModel, field_validator, model_validator
 
-from aind_behavior_force_foraging import __version__
+__version__ = "0.1.0"
 
 MAX_LOAD_CELL_FORCE = 32768
 
