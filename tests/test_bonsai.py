@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+import warnings
 from pathlib import Path
 from typing import Generic, List, Optional, TypeVar, Union
 
@@ -18,6 +19,10 @@ TModel = TypeVar("TModel", bound=Union[AindForceForagingRig, AindForceForagingTa
 
 
 class BonsaiTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter("ignore", category=Warning)
+
     def test_deserialization(self):
         example_roi_trial_type.main("./local/{schema}.json")
 
@@ -51,6 +56,10 @@ class BonsaiTests(unittest.TestCase):
 
 
 class TestModel(Generic[TModel]):
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter("ignore", category=Warning)
+
     def __init__(self, bonsai_property: str, json_root: Path, model: TModel):
         self.bonsai_property: str = bonsai_property
         self.json_path: Path = json_root / f"{model.__name__}.json"

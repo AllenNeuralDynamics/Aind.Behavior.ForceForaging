@@ -168,6 +168,7 @@
                               <Expression xsi:type="MemberSelector">
                                 <Selector>Duration</Selector>
                               </Expression>
+                              <Expression xsi:type="IncludeWorkflow" Path="Extensions\SampleDistributionWithRngSeed.bonsai" />
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p3:TimeSpanFromSeconds" />
                               </Expression>
@@ -190,14 +191,15 @@
                               <Expression xsi:type="WorkflowOutput" />
                             </Nodes>
                             <Edges>
-                              <Edge From="0" To="6" Label="Source1" />
+                              <Edge From="0" To="7" Label="Source1" />
                               <Edge From="1" To="2" Label="Source1" />
                               <Edge From="2" To="3" Label="Source1" />
                               <Edge From="3" To="4" Label="Source1" />
                               <Edge From="4" To="5" Label="Source1" />
-                              <Edge From="5" To="6" Label="Source2" />
-                              <Edge From="6" To="7" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source2" />
                               <Edge From="7" To="8" Label="Source1" />
+                              <Edge From="8" To="9" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>
@@ -219,6 +221,29 @@
                           </Workflow>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>ThisPeriod</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>HasCue</Selector>
+                        </Expression>
+                        <Expression xsi:type="rx:Condition">
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="Unit" />
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>TriggerQuiescencePeriodCue</Name>
+                        </Expression>
                       </Nodes>
                       <Edges>
                         <Edge From="0" To="1" Label="Source1" />
@@ -241,6 +266,10 @@
                         <Edge From="16" To="17" Label="Source1" />
                         <Edge From="17" To="18" Label="Source1" />
                         <Edge From="18" To="19" Label="Source1" />
+                        <Edge From="20" To="21" Label="Source1" />
+                        <Edge From="21" To="22" Label="Source1" />
+                        <Edge From="22" To="23" Label="Source1" />
+                        <Edge From="23" To="24" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -281,7 +310,7 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="rx:SelectMany">
-              <Name>Delay</Name>
+              <Name>InitiationPeriod</Name>
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="SubscribeSubject">
@@ -325,7 +354,7 @@
                   </Expression>
                   <Expression xsi:type="Unit" />
                   <Expression xsi:type="MulticastSubject">
-                    <Name>TriggerStartCue</Name>
+                    <Name>TriggerInitiationCue</Name>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>ThisPeriod</Name>
@@ -333,6 +362,7 @@
                   <Expression xsi:type="MemberSelector">
                     <Selector>Duration</Selector>
                   </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\SampleDistributionWithRngSeed.bonsai" />
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p3:TimeSpanFromSeconds" />
                   </Expression>
@@ -493,17 +523,18 @@
                   <Edge From="13" To="14" Label="Source1" />
                   <Edge From="14" To="15" Label="Source1" />
                   <Edge From="15" To="16" Label="Source1" />
-                  <Edge From="16" To="25" Label="Source1" />
-                  <Edge From="17" To="21" Label="Source1" />
-                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="16" To="17" Label="Source1" />
+                  <Edge From="17" To="26" Label="Source1" />
+                  <Edge From="18" To="22" Label="Source1" />
                   <Edge From="19" To="20" Label="Source1" />
-                  <Edge From="20" To="21" Label="Source2" />
-                  <Edge From="21" To="22" Label="Source1" />
+                  <Edge From="20" To="21" Label="Source1" />
+                  <Edge From="21" To="22" Label="Source2" />
                   <Edge From="22" To="23" Label="Source1" />
                   <Edge From="23" To="24" Label="Source1" />
-                  <Edge From="24" To="25" Label="Source2" />
-                  <Edge From="25" To="26" Label="Source1" />
+                  <Edge From="24" To="25" Label="Source1" />
+                  <Edge From="25" To="26" Label="Source2" />
                   <Edge From="26" To="27" Label="Source1" />
+                  <Edge From="27" To="28" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -700,7 +731,7 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="rx:SelectMany">
-              <Name>Response</Name>
+              <Name>ResponsePeriod</Name>
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="SubscribeSubject">
@@ -744,7 +775,7 @@
                   </Expression>
                   <Expression xsi:type="Unit" />
                   <Expression xsi:type="MulticastSubject">
-                    <Name>TriggerGoCue</Name>
+                    <Name>TriggerResponseCue</Name>
                   </Expression>
                   <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Tuple(p2:HarvestAction,sys:Boolean)">
                     <rx:Name>outcome</rx:Name>
@@ -788,6 +819,7 @@
                   <Expression xsi:type="MemberSelector">
                     <Selector>Duration</Selector>
                   </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\SampleDistributionWithRngSeed.bonsai" />
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p3:TimeSpanFromSeconds" />
                   </Expression>
@@ -827,16 +859,16 @@
                   <Expression xsi:type="MulticastSubject">
                     <Name>outcome</Name>
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="p2:HarvestAction,p2:TrialType">
-                    <MemberName>TrialType</MemberName>
+                  <Expression xsi:type="PropertySource" TypeArguments="p2:HarvestAction,p2:HarvestMode">
+                    <MemberName>HarvestMode</MemberName>
                     <Value>RegionOfInterest</Value>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\RoiTrialTypeResponse.bonsai" />
                   <Expression xsi:type="MulticastSubject">
                     <Name>outcome</Name>
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="p2:HarvestAction,p2:TrialType">
-                    <MemberName>TrialType</MemberName>
+                  <Expression xsi:type="PropertySource" TypeArguments="p2:HarvestAction,p2:HarvestMode">
+                    <MemberName>HarvestMode</MemberName>
                     <Value>Accumulation</Value>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\AccumulationTrialTypeResponse.bonsai" />
@@ -869,13 +901,14 @@
                   <Edge From="25" To="26" Label="Source1" />
                   <Edge From="26" To="27" Label="Source1" />
                   <Edge From="27" To="28" Label="Source1" />
-                  <Edge From="28" To="30" Label="Source1" />
-                  <Edge From="29" To="30" Label="Source2" />
-                  <Edge From="30" To="31" Label="Source1" />
-                  <Edge From="32" To="33" Label="Source1" />
+                  <Edge From="28" To="29" Label="Source1" />
+                  <Edge From="29" To="31" Label="Source1" />
+                  <Edge From="30" To="31" Label="Source2" />
+                  <Edge From="31" To="32" Label="Source1" />
                   <Edge From="33" To="34" Label="Source1" />
-                  <Edge From="35" To="36" Label="Source1" />
+                  <Edge From="34" To="35" Label="Source1" />
                   <Edge From="36" To="37" Label="Source1" />
+                  <Edge From="37" To="38" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1023,9 +1056,7 @@
                               <Expression xsi:type="MemberSelector">
                                 <Selector>TimeToCollect</Selector>
                               </Expression>
-                              <Expression xsi:type="MemberSelector">
-                                <Selector>Value</Selector>
-                              </Expression>
+                              <Expression xsi:type="IncludeWorkflow" Path="Extensions\SampleDistributionWithRngSeed.bonsai" />
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p3:TimeSpanFromSeconds" />
                               </Expression>
@@ -1045,22 +1076,7 @@
                               <Expression xsi:type="MemberSelector">
                                 <Selector>TimeToCollect</Selector>
                               </Expression>
-                              <Expression xsi:type="MemberSelector">
-                                <Selector>HasValue</Selector>
-                              </Expression>
-                              <Expression xsi:type="rx:Condition">
-                                <Workflow>
-                                  <Nodes>
-                                    <Expression xsi:type="WorkflowInput">
-                                      <Name>Source1</Name>
-                                    </Expression>
-                                    <Expression xsi:type="WorkflowOutput" />
-                                  </Nodes>
-                                  <Edges>
-                                    <Edge From="0" To="1" Label="Source1" />
-                                  </Edges>
-                                </Workflow>
-                              </Expression>
+                              <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:SubscribeWhen" />
                               </Expression>
@@ -1093,17 +1109,16 @@
                               <Edge From="2" To="3" Label="Source1" />
                               <Edge From="3" To="4" Label="Source1" />
                               <Edge From="4" To="5" Label="Source1" />
-                              <Edge From="5" To="10" Label="Source1" />
+                              <Edge From="5" To="9" Label="Source1" />
                               <Edge From="6" To="7" Label="Source1" />
                               <Edge From="7" To="8" Label="Source1" />
-                              <Edge From="8" To="9" Label="Source1" />
-                              <Edge From="9" To="10" Label="Source2" />
-                              <Edge From="10" To="11" Label="Source1" />
-                              <Edge From="11" To="14" Label="Source1" />
-                              <Edge From="12" To="13" Label="Source1" />
-                              <Edge From="13" To="14" Label="Source2" />
+                              <Edge From="8" To="9" Label="Source2" />
+                              <Edge From="9" To="10" Label="Source1" />
+                              <Edge From="10" To="13" Label="Source1" />
+                              <Edge From="11" To="12" Label="Source1" />
+                              <Edge From="12" To="13" Label="Source2" />
+                              <Edge From="13" To="14" Label="Source1" />
                               <Edge From="14" To="15" Label="Source1" />
-                              <Edge From="15" To="16" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>
@@ -1343,6 +1358,7 @@
             <Expression xsi:type="MemberSelector">
               <Selector>InterTrialInterval</Selector>
             </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\SampleDistributionWithRngSeed.bonsai" />
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:TimeSpanFromSeconds" />
             </Expression>
@@ -1440,6 +1456,11 @@
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\CreateSoftwareEventInline.bonsai">
               <EventName>TrialOutcome</EventName>
             </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
             <Expression xsi:type="WorkflowOutput" />
             <Expression xsi:type="SubscribeSubject">
               <Name>ThisTrial</Name>
@@ -1465,16 +1486,18 @@
             <Edge From="9" To="10" Label="Source1" />
             <Edge From="10" To="11" Label="Source2" />
             <Edge From="11" To="12" Label="Source1" />
-            <Edge From="12" To="17" Label="Source1" />
+            <Edge From="12" To="18" Label="Source1" />
             <Edge From="13" To="14" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="15" To="16" Label="Source1" />
-            <Edge From="16" To="17" Label="Source2" />
-            <Edge From="17" To="18" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="18" Label="Source2" />
             <Edge From="18" To="19" Label="Source1" />
             <Edge From="19" To="20" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
             <Edge From="21" To="22" Label="Source1" />
-            <Edge From="22" To="23" Label="Source1" />
+            <Edge From="23" To="24" Label="Source1" />
+            <Edge From="24" To="25" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>

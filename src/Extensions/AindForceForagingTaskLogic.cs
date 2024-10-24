@@ -127,6 +127,8 @@ namespace AindForceForagingDataSchema.TaskLogic
     
         private double? _rngSeed;
     
+        private string _aindBehaviorServicesPkgVersion = "0.8.1";
+    
         private Environment _environment = new Environment();
     
         private System.Collections.Generic.IDictionary<string, NumericalUpdater> _updaters;
@@ -140,6 +142,7 @@ namespace AindForceForagingDataSchema.TaskLogic
         protected AindForceForagingTaskParameters(AindForceForagingTaskParameters other)
         {
             _rngSeed = other._rngSeed;
+            _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
             _environment = other._environment;
             _updaters = other._updaters;
             _operationControl = other._operationControl;
@@ -160,6 +163,19 @@ namespace AindForceForagingDataSchema.TaskLogic
             set
             {
                 _rngSeed = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
+        public string AindBehaviorServicesPkgVersion
+        {
+            get
+            {
+                return _aindBehaviorServicesPkgVersion;
+            }
+            set
+            {
+                _aindBehaviorServicesPkgVersion = value;
             }
         }
     
@@ -230,6 +246,7 @@ namespace AindForceForagingDataSchema.TaskLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("aind_behavior_services_pkg_version = " + _aindBehaviorServicesPkgVersion + ", ");
             stringBuilder.Append("environment = " + _environment + ", ");
             stringBuilder.Append("updaters = " + _updaters + ", ");
             stringBuilder.Append("operation_control = " + _operationControl);
@@ -273,11 +290,11 @@ namespace AindForceForagingDataSchema.TaskLogic
         }
     
         /// <summary>
-        /// Input domain. All values should be between 0 and 1
+        /// Normalized input domain. All values should be between 0 and 1
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("converter_lut_input")]
-        [System.ComponentModel.DescriptionAttribute("Input domain. All values should be between 0 and 1")]
+        [System.ComponentModel.DescriptionAttribute("Normalized input domain. All values should be between 0 and 1")]
         public System.Collections.Generic.List<double> ConverterLutInput
         {
             get
@@ -969,7 +986,6 @@ namespace AindForceForagingDataSchema.TaskLogic
     [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "mode")]
     [JsonInheritanceAttribute("Block", typeof(Block))]
     [JsonInheritanceAttribute("BlockGenerator", typeof(BlockGenerator))]
-    [JsonInheritanceAttribute("BrownianRandomWalk", typeof(BrownianRandomWalk))]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     public partial class BlockStatistics
@@ -1009,107 +1025,6 @@ namespace AindForceForagingDataSchema.TaskLogic
             }
             stringBuilder.Append("}");
             return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class BrownianRandomWalk : BlockStatistics
-    {
-    
-        private bool _isBaited = false;
-    
-        private Distribution _blockSize;
-    
-        private Trial _trialStatistics = new Trial();
-    
-        public BrownianRandomWalk()
-        {
-        }
-    
-        protected BrownianRandomWalk(BrownianRandomWalk other) : 
-                base(other)
-        {
-            _isBaited = other._isBaited;
-            _blockSize = other._blockSize;
-            _trialStatistics = other._trialStatistics;
-        }
-    
-        /// <summary>
-        /// Whether the trials are baited
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("is_baited")]
-        [System.ComponentModel.DescriptionAttribute("Whether the trials are baited")]
-        public bool IsBaited
-        {
-            get
-            {
-                return _isBaited;
-            }
-            set
-            {
-                _isBaited = value;
-            }
-        }
-    
-        /// <summary>
-        /// Size of the block
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_size")]
-        [System.ComponentModel.DescriptionAttribute("Size of the block")]
-        public Distribution BlockSize
-        {
-            get
-            {
-                return _blockSize;
-            }
-            set
-            {
-                _blockSize = value;
-            }
-        }
-    
-        /// <summary>
-        /// Statistics of the trials in the block
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("trial_statistics", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Statistics of the trials in the block")]
-        public Trial TrialStatistics
-        {
-            get
-            {
-                return _trialStatistics;
-            }
-            set
-            {
-                _trialStatistics = value;
-            }
-        }
-    
-        public System.IObservable<BrownianRandomWalk> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BrownianRandomWalk(this)));
-        }
-    
-        public System.IObservable<BrownianRandomWalk> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new BrownianRandomWalk(this));
-        }
-    
-        protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            if (base.PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(", ");
-            }
-            stringBuilder.Append("is_baited = " + _isBaited + ", ");
-            stringBuilder.Append("block_size = " + _blockSize + ", ");
-            stringBuilder.Append("trial_statistics = " + _trialStatistics);
-            return true;
         }
     }
 
@@ -1175,6 +1090,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     [JsonInheritanceAttribute("Binomial", typeof(BinomialDistribution))]
     [JsonInheritanceAttribute("Beta", typeof(BetaDistribution))]
     [JsonInheritanceAttribute("Gamma", typeof(GammaDistribution))]
+    [JsonInheritanceAttribute("Pdf", typeof(PdfDistribution))]
     [System.ComponentModel.DescriptionAttribute("Available distributions")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -2052,7 +1968,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     
         private HarvestActionLabel _action = AindForceForagingDataSchema.TaskLogic.HarvestActionLabel.None;
     
-        private TrialType _trialType = AindForceForagingDataSchema.TaskLogic.TrialType.None;
+        private HarvestMode _harvestMode;
     
         private double _probability = 1D;
     
@@ -2068,7 +1984,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     
         private bool _isOperant = true;
     
-        private double? _timeToCollect;
+        private Distribution _timeToCollect;
     
         private System.Collections.Generic.List<ActionUpdater> _actionUpdaters = new System.Collections.Generic.List<ActionUpdater>();
     
@@ -2081,7 +1997,7 @@ namespace AindForceForagingDataSchema.TaskLogic
         protected HarvestAction(HarvestAction other)
         {
             _action = other._action;
-            _trialType = other._trialType;
+            _harvestMode = other._harvestMode;
             _probability = other._probability;
             _amount = other._amount;
             _delay = other._delay;
@@ -2116,17 +2032,17 @@ namespace AindForceForagingDataSchema.TaskLogic
         /// Type of the trial
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("trial_type")]
+        [Newtonsoft.Json.JsonPropertyAttribute("harvest_mode", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Type of the trial")]
-        public TrialType TrialType
+        public HarvestMode HarvestMode
         {
             get
             {
-                return _trialType;
+                return _harvestMode;
             }
             set
             {
-                _trialType = value;
+                _harvestMode = value;
             }
         }
     
@@ -2256,7 +2172,7 @@ namespace AindForceForagingDataSchema.TaskLogic
         [Newtonsoft.Json.JsonPropertyAttribute("time_to_collect")]
         [System.ComponentModel.DescriptionAttribute("Time to collect the reward after it is available. If null, the reward will be ava" +
             "ilable indefinitely.")]
-        public double? TimeToCollect
+        public Distribution TimeToCollect
         {
             get
             {
@@ -2317,7 +2233,7 @@ namespace AindForceForagingDataSchema.TaskLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("action = " + _action + ", ");
-            stringBuilder.Append("trial_type = " + _trialType + ", ");
+            stringBuilder.Append("harvest_mode = " + _harvestMode + ", ");
             stringBuilder.Append("probability = " + _probability + ", ");
             stringBuilder.Append("amount = " + _amount + ", ");
             stringBuilder.Append("delay = " + _delay + ", ");
@@ -2366,6 +2282,25 @@ namespace AindForceForagingDataSchema.TaskLogic
 
 
     /// <summary>
+    /// Defines the trial types
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum HarvestMode
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="None")]
+        None = 0,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="Accumulation")]
+        Accumulation = 1,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="RegionOfInterest")]
+        RegionOfInterest = 2,
+    }
+
+
+    /// <summary>
     /// Defines an initiation period
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -2375,7 +2310,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     public partial class InitiationPeriod
     {
     
-        private double _duration = 0D;
+        private Distribution _duration;
     
         private bool _hasCue = true;
     
@@ -2398,9 +2333,10 @@ namespace AindForceForagingDataSchema.TaskLogic
         /// <summary>
         /// Duration of the initiation period
         /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("duration")]
         [System.ComponentModel.DescriptionAttribute("Duration of the initiation period")]
-        public double Duration
+        public Distribution Duration
         {
             get
             {
@@ -2724,11 +2660,11 @@ namespace AindForceForagingDataSchema.TaskLogic
         }
     
         /// <summary>
-        /// Input domain. All values should be between 0 and 1
+        /// Normalized input domain. All values should be between 0 and 1
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("converter_lut_input")]
-        [System.ComponentModel.DescriptionAttribute("Input domain. All values should be between 0 and 1")]
+        [System.ComponentModel.DescriptionAttribute("Normalized input domain. All values should be between 0 and 1")]
         public System.Collections.Generic.List<double> ConverterLutInput
         {
             get
@@ -3294,6 +3230,213 @@ namespace AindForceForagingDataSchema.TaskLogic
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class PdfDistribution : Distribution
+    {
+    
+        private PdfDistributionParameters _distributionParameters;
+    
+        private TruncationParameters _truncationParameters;
+    
+        private ScalingParameters _scalingParameters;
+    
+        public PdfDistribution()
+        {
+        }
+    
+        protected PdfDistribution(PdfDistribution other) : 
+                base(other)
+        {
+            _distributionParameters = other._distributionParameters;
+            _truncationParameters = other._truncationParameters;
+            _scalingParameters = other._scalingParameters;
+        }
+    
+        /// <summary>
+        /// Parameters of the distribution
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("distribution_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters of the distribution")]
+        public PdfDistributionParameters DistributionParameters
+        {
+            get
+            {
+                return _distributionParameters;
+            }
+            set
+            {
+                _distributionParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Truncation parameters of the distribution
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("truncation_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Truncation parameters of the distribution")]
+        public TruncationParameters TruncationParameters
+        {
+            get
+            {
+                return _truncationParameters;
+            }
+            set
+            {
+                _truncationParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Scaling parameters of the distribution
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("scaling_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Scaling parameters of the distribution")]
+        public ScalingParameters ScalingParameters
+        {
+            get
+            {
+                return _scalingParameters;
+            }
+            set
+            {
+                _scalingParameters = value;
+            }
+        }
+    
+        public System.IObservable<PdfDistribution> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new PdfDistribution(this)));
+        }
+    
+        public System.IObservable<PdfDistribution> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new PdfDistribution(this));
+        }
+    
+        protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            if (base.PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(", ");
+            }
+            stringBuilder.Append("distribution_parameters = " + _distributionParameters + ", ");
+            stringBuilder.Append("truncation_parameters = " + _truncationParameters + ", ");
+            stringBuilder.Append("scaling_parameters = " + _scalingParameters);
+            return true;
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class PdfDistributionParameters
+    {
+    
+        private string _family = "Pdf";
+    
+        private System.Collections.Generic.List<double> _pdf = new System.Collections.Generic.List<double>();
+    
+        private System.Collections.Generic.List<double> _index = new System.Collections.Generic.List<double>();
+    
+        public PdfDistributionParameters()
+        {
+        }
+    
+        protected PdfDistributionParameters(PdfDistributionParameters other)
+        {
+            _family = other._family;
+            _pdf = other._pdf;
+            _index = other._index;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("family")]
+        public string Family
+        {
+            get
+            {
+                return _family;
+            }
+            set
+            {
+                _family = value;
+            }
+        }
+    
+        /// <summary>
+        /// The probability density function
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("pdf")]
+        [System.ComponentModel.DescriptionAttribute("The probability density function")]
+        public System.Collections.Generic.List<double> Pdf
+        {
+            get
+            {
+                return _pdf;
+            }
+            set
+            {
+                _pdf = value;
+            }
+        }
+    
+        /// <summary>
+        /// The index of the probability density function
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("index")]
+        [System.ComponentModel.DescriptionAttribute("The index of the probability density function")]
+        public System.Collections.Generic.List<double> Index
+        {
+            get
+            {
+                return _index;
+            }
+            set
+            {
+                _index = value;
+            }
+        }
+    
+        public System.IObservable<PdfDistributionParameters> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new PdfDistributionParameters(this)));
+        }
+    
+        public System.IObservable<PdfDistributionParameters> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new PdfDistributionParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("family = " + _family + ", ");
+            stringBuilder.Append("pdf = " + _pdf + ", ");
+            stringBuilder.Append("index = " + _index);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     public partial class PoissonDistribution : Distribution
     {
     
@@ -3516,7 +3659,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     public partial class QuiescencePeriod
     {
     
-        private double _duration = 0D;
+        private Distribution _duration;
     
         private double _forceThreshold = 0D;
     
@@ -3536,9 +3679,10 @@ namespace AindForceForagingDataSchema.TaskLogic
         /// <summary>
         /// Duration of the quiescence period
         /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("duration")]
         [System.ComponentModel.DescriptionAttribute("Duration of the quiescence period")]
-        public double Duration
+        public Distribution Duration
         {
             get
             {
@@ -3627,7 +3771,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     public partial class ResponsePeriod
     {
     
-        private double _duration = 0D;
+        private Distribution _duration;
     
         private bool _hasCue = true;
     
@@ -3647,9 +3791,10 @@ namespace AindForceForagingDataSchema.TaskLogic
         /// <summary>
         /// Duration of the response period. I.e. the time the animal has to make a choice.
         /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("duration")]
         [System.ComponentModel.DescriptionAttribute("Duration of the response period. I.e. the time the animal has to make a choice.")]
-        public double Duration
+        public Distribution Duration
         {
             get
             {
@@ -4107,7 +4252,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     public partial class Trial
     {
     
-        private double _interTrialInterval = 0D;
+        private Distribution _interTrialInterval;
     
         private QuiescencePeriod _quiescencePeriod;
     
@@ -4136,9 +4281,10 @@ namespace AindForceForagingDataSchema.TaskLogic
         /// <summary>
         /// Time between trials
         /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval")]
         [System.ComponentModel.DescriptionAttribute("Time between trials")]
-        public double InterTrialInterval
+        public Distribution InterTrialInterval
         {
             get
             {
@@ -4273,25 +4419,6 @@ namespace AindForceForagingDataSchema.TaskLogic
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
-    }
-
-
-    /// <summary>
-    /// Defines the trial types
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public enum TrialType
-    {
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="None")]
-        None = 0,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="Accumulation")]
-        Accumulation = 1,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="RegionOfInterest")]
-        RegionOfInterest = 2,
     }
 
 
@@ -4666,7 +4793,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     
         private AindForceForagingTaskParameters _taskParameters = new AindForceForagingTaskParameters();
     
-        private string _version = "0.1.0-preview01";
+        private string _version = "0.1.0";
     
         private string _stageName;
     
@@ -5030,7 +5157,6 @@ namespace AindForceForagingDataSchema.TaskLogic
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Block>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BlockGenerator>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BrownianRandomWalk>))]
     public partial class MatchBlockStatistics : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
@@ -5120,6 +5246,7 @@ namespace AindForceForagingDataSchema.TaskLogic
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BinomialDistribution>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BetaDistribution>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<GammaDistribution>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<PdfDistribution>))]
     public partial class MatchDistribution : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
@@ -5221,11 +5348,6 @@ namespace AindForceForagingDataSchema.TaskLogic
             return Process<BlockStatistics>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<BrownianRandomWalk> source)
-        {
-            return Process<BrownianRandomWalk>(source);
-        }
-
         public System.IObservable<string> Process(System.IObservable<ContinuousFeedback> source)
         {
             return Process<ContinuousFeedback>(source);
@@ -5319,6 +5441,16 @@ namespace AindForceForagingDataSchema.TaskLogic
         public System.IObservable<string> Process(System.IObservable<OperationControl> source)
         {
             return Process<OperationControl>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<PdfDistribution> source)
+        {
+            return Process<PdfDistribution>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<PdfDistributionParameters> source)
+        {
+            return Process<PdfDistributionParameters>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<PoissonDistribution> source)
@@ -5415,7 +5547,6 @@ namespace AindForceForagingDataSchema.TaskLogic
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Block>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BlockGenerator>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BlockStatistics>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BrownianRandomWalk>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ContinuousFeedback>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Distribution>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Environment>))]
@@ -5435,6 +5566,8 @@ namespace AindForceForagingDataSchema.TaskLogic
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<NumericalUpdater>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<NumericalUpdaterParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OperationControl>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<PdfDistribution>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<PdfDistributionParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<PoissonDistribution>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<PoissonDistributionParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<QuiescencePeriod>))]

@@ -51,6 +51,12 @@
           ],
           "title": "Rng Seed"
         },
+        "aind_behavior_services_pkg_version": {
+          "default": "0.8.1",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "title": "aind_behavior_services package version",
+          "type": "string"
+        },
         "environment": {
           "allOf": [
             {
@@ -108,7 +114,7 @@
             0,
             1
           ],
-          "description": "Input domain. All values should be between 0 and 1",
+          "description": "Normalized input domain. All values should be between 0 and 1",
           "items": {
             "maximum": 1.0,
             "minimum": 0.0,
@@ -383,8 +389,7 @@
       "discriminator": {
         "mapping": {
           "Block": "#/definitions/Block",
-          "BlockGenerator": "#/definitions/BlockGenerator",
-          "BrownianRandomWalk": "#/definitions/BrownianRandomWalk"
+          "BlockGenerator": "#/definitions/BlockGenerator"
         },
         "propertyName": "mode"
       },
@@ -394,59 +399,8 @@
         },
         {
           "$ref": "#/definitions/BlockGenerator"
-        },
-        {
-          "$ref": "#/definitions/BrownianRandomWalk"
         }
-      ],
-      "title": "BlockStatistics"
-    },
-    "BrownianRandomWalk": {
-      "properties": {
-        "mode": {
-          "const": "BrownianRandomWalk",
-          "default": "BrownianRandomWalk",
-          "title": "Mode",
-          "type": "string"
-        },
-        "is_baited": {
-          "default": false,
-          "description": "Whether the trials are baited",
-          "title": "Is Baited",
-          "type": "boolean"
-        },
-        "block_size": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/Distribution"
-            }
-          ],
-          "default": {
-            "family": "Uniform",
-            "distribution_parameters": {
-              "family": "Uniform",
-              "max": 60.0,
-              "min": 50.0
-            },
-            "truncation_parameters": null,
-            "scaling_parameters": null
-          },
-          "description": "Size of the block"
-        },
-        "trial_statistics": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/Trial"
-            }
-          ],
-          "description": "Statistics of the trials in the block"
-        }
-      },
-      "required": [
-        "trial_statistics"
-      ],
-      "title": "BrownianRandomWalk",
-      "type": "object"
+      ]
     },
     "ContinuousFeedback": {
       "discriminator": {
@@ -463,8 +417,7 @@
         {
           "$ref": "#/definitions/AudioFeedback"
         }
-      ],
-      "title": "ContinuousFeedback"
+      ]
     },
     "Distribution": {
       "description": "Available distributions",
@@ -476,6 +429,7 @@
           "Gamma": "#/definitions/GammaDistribution",
           "LogNormal": "#/definitions/LogNormalDistribution",
           "Normal": "#/definitions/NormalDistribution",
+          "Pdf": "#/definitions/PdfDistribution",
           "Poisson": "#/definitions/PoissonDistribution",
           "Scalar": "#/definitions/Scalar",
           "Uniform": "#/definitions/UniformDistribution"
@@ -509,6 +463,9 @@
         },
         {
           "$ref": "#/definitions/GammaDistribution"
+        },
+        {
+          "$ref": "#/definitions/PdfDistribution"
         }
       ],
       "title": "Distribution"
@@ -792,13 +749,12 @@
           "default": "None",
           "description": "Label of the action"
         },
-        "trial_type": {
+        "harvest_mode": {
           "allOf": [
             {
-              "$ref": "#/definitions/TrialType"
+              "$ref": "#/definitions/HarvestMode"
             }
           ],
-          "default": "None",
           "description": "Type of the trial"
         },
         "probability": {
@@ -852,14 +808,12 @@
           "description": "Time to collect the reward after it is available. If null, the reward will be available indefinitely.",
           "oneOf": [
             {
-              "minimum": 0.0,
-              "type": "number"
+              "$ref": "#/definitions/Distribution"
             },
             {
               "type": "null"
             }
-          ],
-          "title": "Time To Collect"
+          ]
         },
         "action_updaters": {
           "default": [],
@@ -883,6 +837,9 @@
           ]
         }
       },
+      "required": [
+        "harvest_mode"
+      ],
       "title": "HarvestAction",
       "type": "object"
     },
@@ -896,15 +853,35 @@
       "title": "HarvestActionLabel",
       "type": "string"
     },
+    "HarvestMode": {
+      "description": "Defines the trial types",
+      "enum": [
+        "None",
+        "Accumulation",
+        "RegionOfInterest"
+      ],
+      "title": "HarvestMode",
+      "type": "string"
+    },
     "InitiationPeriod": {
       "description": "Defines an initiation period",
       "properties": {
         "duration": {
-          "default": 0,
-          "description": "Duration of the initiation period",
-          "minimum": 0.0,
-          "title": "Duration",
-          "type": "number"
+          "allOf": [
+            {
+              "$ref": "#/definitions/Distribution"
+            }
+          ],
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 0.5
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "Duration of the initiation period"
         },
         "has_cue": {
           "default": true,
@@ -1016,7 +993,7 @@
             0,
             1
           ],
-          "description": "Input domain. All values should be between 0 and 1",
+          "description": "Normalized input domain. All values should be between 0 and 1",
           "items": {
             "maximum": 1.0,
             "minimum": 0.0,
@@ -1230,6 +1207,94 @@
       "title": "OperationControl",
       "type": "object"
     },
+    "PdfDistribution": {
+      "properties": {
+        "family": {
+          "const": "Pdf",
+          "default": "Pdf",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/PdfDistributionParameters"
+            }
+          ],
+          "default": {
+            "family": "Pdf",
+            "pdf": [
+              1.0
+            ],
+            "index": [
+              0.0
+            ]
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "PdfDistribution",
+      "type": "object"
+    },
+    "PdfDistributionParameters": {
+      "properties": {
+        "family": {
+          "const": "Pdf",
+          "default": "Pdf",
+          "title": "Family",
+          "type": "string"
+        },
+        "pdf": {
+          "default": [
+            1
+          ],
+          "description": "The probability density function",
+          "items": {
+            "minimum": 0.0,
+            "type": "number"
+          },
+          "title": "Pdf",
+          "type": "array"
+        },
+        "index": {
+          "default": [
+            0
+          ],
+          "description": "The index of the probability density function",
+          "items": {
+            "type": "number"
+          },
+          "title": "Index",
+          "type": "array"
+        }
+      },
+      "title": "PdfDistributionParameters",
+      "type": "object"
+    },
     "PoissonDistribution": {
       "properties": {
         "family": {
@@ -1315,11 +1380,21 @@
       "description": "Defines a quiescence settings",
       "properties": {
         "duration": {
-          "default": 0,
-          "description": "Duration of the quiescence period",
-          "minimum": 0.0,
-          "title": "Duration",
-          "type": "number"
+          "allOf": [
+            {
+              "$ref": "#/definitions/Distribution"
+            }
+          ],
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 0.5
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "Duration of the quiescence period"
         },
         "force_threshold": {
           "default": 0,
@@ -1343,11 +1418,21 @@
       "description": "Defines a response period",
       "properties": {
         "duration": {
-          "default": 0,
-          "description": "Duration of the response period. I.e. the time the animal has to make a choice.",
-          "minimum": 0.0,
-          "title": "Duration",
-          "type": "number"
+          "allOf": [
+            {
+              "$ref": "#/definitions/Distribution"
+            }
+          ],
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 0.5
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "Duration of the response period. I.e. the time the animal has to make a choice."
         },
         "has_cue": {
           "default": true,
@@ -1465,11 +1550,21 @@
       "description": "Defines a trial",
       "properties": {
         "inter_trial_interval": {
-          "default": 0,
-          "description": "Time between trials",
-          "minimum": 0.0,
-          "title": "Inter Trial Interval",
-          "type": "number"
+          "allOf": [
+            {
+              "$ref": "#/definitions/Distribution"
+            }
+          ],
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 0.5
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "Time between trials"
         },
         "quiescence_period": {
           "default": null,
@@ -1490,7 +1585,15 @@
             }
           ],
           "default": {
-            "duration": 0.0,
+            "duration": {
+              "distribution_parameters": {
+                "family": "Scalar",
+                "value": 0.5
+              },
+              "family": "Scalar",
+              "scaling_parameters": null,
+              "truncation_parameters": null
+            },
             "has_cue": true,
             "abort_on_force": false,
             "abort_on_force_threshold": 0.0
@@ -1504,27 +1607,22 @@
             }
           ],
           "default": {
-            "duration": 0.0,
+            "duration": {
+              "distribution_parameters": {
+                "family": "Scalar",
+                "value": 0.5
+              },
+              "family": "Scalar",
+              "scaling_parameters": null,
+              "truncation_parameters": null
+            },
             "has_cue": true,
             "has_feedback": false
           },
           "description": "Response settings"
         },
         "left_harvest": {
-          "default": {
-            "action": "Left",
-            "trial_type": "None",
-            "probability": 1.0,
-            "amount": 1.0,
-            "delay": 0.0,
-            "force_duration": 0.5,
-            "upper_force_threshold": 32768.0,
-            "lower_force_threshold": 5000.0,
-            "is_operant": true,
-            "time_to_collect": null,
-            "action_updaters": [],
-            "continuous_feedback": null
-          },
+          "default": null,
           "description": "Specification of the left action",
           "oneOf": [
             {
@@ -1536,20 +1634,7 @@
           ]
         },
         "right_harvest": {
-          "default": {
-            "action": "Right",
-            "trial_type": "None",
-            "probability": 1.0,
-            "amount": 1.0,
-            "delay": 0.0,
-            "force_duration": 0.5,
-            "upper_force_threshold": 32768.0,
-            "lower_force_threshold": 5000.0,
-            "is_operant": true,
-            "time_to_collect": null,
-            "action_updaters": [],
-            "continuous_feedback": null
-          },
+          "default": null,
           "description": "Specification of the right action",
           "oneOf": [
             {
@@ -1563,16 +1648,6 @@
       },
       "title": "Trial",
       "type": "object"
-    },
-    "TrialType": {
-      "description": "Defines the trial types",
-      "enum": [
-        "None",
-        "Accumulation",
-        "RegionOfInterest"
-      ],
-      "title": "TrialType",
-      "type": "string"
     },
     "TruncationParameters": {
       "properties": {
@@ -1718,8 +1793,8 @@
       "description": "Parameters of the task logic"
     },
     "version": {
-      "const": "0.1.0-preview01",
-      "default": "0.1.0-preview01",
+      "const": "0.1.0",
+      "default": "0.1.0",
       "title": "Version",
       "type": "string"
     },
