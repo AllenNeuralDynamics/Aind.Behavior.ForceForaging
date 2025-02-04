@@ -5504,7 +5504,7 @@ Value.RightForce as RightForce) as Force)</scr:Expression>
                     </Workflow>
                   </Expression>
                   <Expression xsi:type="VisualizerMapping">
-                    <VisualizerType xsi:type="TypeMapping" TypeArguments="gui:ButtonVisualizer" />
+                    <VisualizerType xsi:type="TypeMapping" TypeArguments="gui:TableLayoutPanelVisualizer" />
                   </Expression>
                   <Expression xsi:type="gui:ButtonBuilder">
                     <gui:Name>ForceReward</gui:Name>
@@ -5523,8 +5523,8 @@ Value.RightForce as RightForce) as Force)</scr:Expression>
                     <gui:Enabled>true</gui:Enabled>
                     <gui:Visible>true</gui:Visible>
                     <gui:Font>Microsoft Sans Serif, 20pt</gui:Font>
-                    <gui:ColumnCount>5</gui:ColumnCount>
-                    <gui:RowCount>5</gui:RowCount>
+                    <gui:ColumnCount>3</gui:ColumnCount>
+                    <gui:RowCount>3</gui:RowCount>
                     <gui:ColumnStyles />
                     <gui:RowStyles />
                     <gui:CellSpans />
