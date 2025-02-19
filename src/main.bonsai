@@ -440,7 +440,7 @@ Item3 as Right)</scr:Expression>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\HarpClockGenerator.bonsai">
                     <PortName>COMx</PortName>
-                    <TriggerHarpReadDumpSubjectName>HarpClockGenEvents</TriggerHarpReadDumpSubjectName>
+                    <TriggerHarpReadDumpSubjectName>TriggerHarpReadDump</TriggerHarpReadDumpSubjectName>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>RigSchema</Name>
