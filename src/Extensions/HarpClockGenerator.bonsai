@@ -32,7 +32,7 @@
         <Property Name="Name" DisplayName="TriggerHarpReadDumpSubjectName" />
       </Expression>
       <Expression xsi:type="SubscribeSubject">
-        <Name>HarpClockGenEvents</Name>
+        <Name>TriggerHarpReadDump</Name>
       </Expression>
       <Expression xsi:type="harp:CreateMessage">
         <harp:MessageType>Write</harp:MessageType>
