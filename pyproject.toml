@@ -19,7 +19,7 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-  "aind_behavior_services>=0.9, <0.10",
+  "aind_behavior_services==0.10",
 ]
 
 [project.urls]
