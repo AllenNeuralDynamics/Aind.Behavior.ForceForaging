@@ -11,7 +11,7 @@ from aind_behavior_services.calibration import aind_manipulator
 from aind_behavior_services.rig import AindBehaviorRigModel
 from pydantic import BaseModel, Field
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 
 class AindManipulatorAdditionalSettings(BaseModel):
@@ -41,7 +41,7 @@ class AindForceForagingRig(AindBehaviorRigModel):
         default=None, description="Optional camera controller for monitoring cameras."
     )
     harp_behavior: rig.HarpBehavior = Field(..., description="Harp behavior")
-    harp_lickometer: rig.HarpLickometer = Field(..., description="Harp lickometer")
+    harp_lickometer: rig.HarpLicketySplit = Field(..., description="Harp lickometer")
     harp_load_cells: lcc.LoadCells = Field(..., description="Harp load cells")
     harp_clock_generator: rig.HarpWhiteRabbit = Field(..., description="Harp clock generator")
     harp_analog_input: Optional[rig.HarpAnalogInput] = Field(default=None, description="Harp analog input")
@@ -50,4 +50,4 @@ class AindForceForagingRig(AindBehaviorRigModel):
     )
     manipulator: AindManipulatorDevice = Field(..., description="Manipulator")
     screen: rig.Screen = Field(default=rig.Screen(), description="Screen settings")
-    calibration: RigCalibration = Field(default=None, description="Load cells calibration")
+    calibration: RigCalibration = Field(..., description="Load cells calibration")

@@ -97,7 +97,7 @@ def mock_rig() -> AindForceForagingRig:
         harp_load_cells=lcc.LoadCells(port_name="COM4", calibration=load_cells_calibration),
         monitoring_camera_controller=rig.CameraController[rig.WebCamera](cameras={"WebCam0": rig.WebCamera(index=0)}),
         harp_behavior=rig.HarpBehavior(port_name="COM3"),
-        harp_lickometer=rig.HarpLickometer(port_name="COM5"),
+        harp_lickometer=rig.HarpLicketySplit(port_name="COM5"),
         harp_clock_generator=rig.HarpWhiteRabbit(port_name="COM6"),
         harp_analog_input=None,
         manipulator=AindManipulatorDevice(port_name="COM9", calibration=manipulator_calibration),
