@@ -2573,11 +2573,11 @@ namespace AindForceForagingDataSchema.Rig
     
         private int _channel;
     
-        private int? _offset;
+        private int _offset = 0;
     
-        private double? _baseline;
+        private double _baseline = 0D;
     
-        private double? _slope;
+        private double _slope = 1D;
     
         private System.Collections.Generic.List<MeasuredWeight> _weightLookup = new System.Collections.Generic.List<MeasuredWeight>();
     
@@ -2611,9 +2611,12 @@ namespace AindForceForagingDataSchema.Rig
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        /// <summary>
+        /// Load cell offset value [-255, 255]
+        /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("offset")]
-        public int? Offset
+        [System.ComponentModel.DescriptionAttribute("Load cell offset value [-255, 255]")]
+        public int Offset
         {
             get
             {
@@ -2625,9 +2628,8 @@ namespace AindForceForagingDataSchema.Rig
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("baseline")]
-        public double? Baseline
+        public double Baseline
         {
             get
             {
@@ -2639,9 +2641,8 @@ namespace AindForceForagingDataSchema.Rig
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("slope")]
-        public double? Slope
+        public double Slope
         {
             get
             {
@@ -5708,7 +5709,7 @@ namespace AindForceForagingDataSchema.Rig
     public partial class AindForceForagingRig
     {
     
-        private string _aindBehaviorServicesPkgVersion = "0.10.0";
+        private string _aindBehaviorServicesPkgVersion = "0.10.2";
     
         private string _version = "0.3.0";
     
