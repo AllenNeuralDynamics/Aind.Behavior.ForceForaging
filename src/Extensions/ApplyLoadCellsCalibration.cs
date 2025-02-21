@@ -7,7 +7,7 @@ using Bonsai.Harp;
 using System.Xml.Serialization;
 
 [Combinator]
-[Description("Applies a LoadCellsCalibration object to a sequence of load cell data values.")]
+[Description("Applies a LoadCellsCalibration object to a sequence of load cell data values. The correction is applied in the form of: grams = (adc_value - baseline) * slope.")]
 [WorkflowElementCategory(ElementCategory.Transform)]
 public class ApplyLoadCellsCalibration
 {

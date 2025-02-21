@@ -984,43 +984,22 @@
           "type": "integer"
         },
         "offset": {
-          "default": null,
-          "oneOf": [
-            {
-              "description": "Load cell offset value [-255, 255]",
-              "maximum": 255,
-              "minimum": -255,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Load cell offset applied to the wheatstone bridge circuit"
+          "default": 0,
+          "description": "Load cell offset value [-255, 255]",
+          "maximum": 255,
+          "minimum": -255,
+          "title": "Load cell offset applied to the wheatstone bridge circuit",
+          "type": "integer"
         },
         "baseline": {
-          "default": null,
-          "oneOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Load cell baseline that will be DSP subtracted"
+          "default": 0.0,
+          "title": "Load cell baseline that will be DSP subtracted to the raw adc output.",
+          "type": "number"
         },
         "slope": {
-          "default": null,
-          "oneOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Load cell slope that will be used to convert adc units to weight (g)."
+          "default": 1.0,
+          "title": "Load cell slope that will be used to convert tared (- baseline) adc units to weight (g).",
+          "type": "number"
         },
         "weight_lookup": {
           "default": [],
@@ -2257,7 +2236,7 @@
   },
   "properties": {
     "aind_behavior_services_pkg_version": {
-      "default": "0.10.0",
+      "default": "0.10.2",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
       "title": "aind_behavior_services package version",
       "type": "string"

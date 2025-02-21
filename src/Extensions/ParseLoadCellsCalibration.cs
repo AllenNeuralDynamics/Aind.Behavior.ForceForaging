@@ -12,6 +12,7 @@ using AindForceForagingDataSchema.Rig;
 [WorkflowElementCategory(ElementCategory.Transform)]
 public class ParseLoadCellsCalibration
 {
+    /// The tuple represents Offset, Baseline, LoadCellIndex, respectively.
     public IObservable<LoadCellsCalibrations> Process(IObservable<IEnumerable<Tuple<int, int, int>>> source)
     {
         return source.Select(value => {
@@ -48,19 +49,14 @@ public class ParseLoadCellsCalibration
             return calibrations;
         });
     }
+
     public IObservable<LoadCellsCalibrations> Process(IObservable<IEnumerable<LoadCellCalibrationOutput>> source)
     {
         return source.Select(value => {
             var calibrations = new LoadCellsCalibrations();
             foreach (var calibration in value)
             {
-                calibrations.Add(new LoadCellCalibration
-                {
-                    Offset = calibration.Offset.HasValue ? calibration.Offset.Value : 0,
-                    Baseline = (int)(calibration.Baseline.HasValue ? calibration.Baseline.Value : 0),
-                    LoadCellIndex = calibration.Channel,
-                    Slope = calibration.Slope.HasValue ? calibration.Slope.Value : 1,
-                });
+                calibrations.Add(new LoadCellCalibration(calibration));
             }
             return calibrations;
         });
@@ -79,7 +75,7 @@ public class LoadCellCalibration{
     {
         Offset = 0;
         Baseline = 0;
-        LoadCellIndex = 0;
+        LoadCellIndex = -1;
         Slope = 1;
     }
 
@@ -88,6 +84,19 @@ public class LoadCellCalibration{
         Offset = other.Offset;
         Baseline = other.Baseline;
         LoadCellIndex = other.LoadCellIndex;
+        Slope = other.Slope;
+    }
+
+
+    /// <summary>
+    /// Constructor to ensure conversion between LoadCellCalibrationOutput and LoadCellCalibration
+    /// </summary>
+    /// <param name="other"></param>
+    public LoadCellCalibration(LoadCellCalibrationOutput other)
+    {
+        Offset = other.Offset;
+        Baseline = (int)other.Baseline;
+        LoadCellIndex = other.Channel;
         Slope = other.Slope;
     }
 }
