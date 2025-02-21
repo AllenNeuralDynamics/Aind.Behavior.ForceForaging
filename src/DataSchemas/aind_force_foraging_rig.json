@@ -164,8 +164,8 @@
       "description": "Overrides the default settings for the manipulator device by spec'ing additional_settings field",
       "properties": {
         "device_type": {
-          "const": "stepperdriver",
-          "default": "stepperdriver",
+          "const": "StepperDriver",
+          "default": "StepperDriver",
           "title": "Device Type",
           "type": "string"
         },
@@ -621,8 +621,8 @@
     "HarpAnalogInput": {
       "properties": {
         "device_type": {
-          "const": "analoginput",
-          "default": "analoginput",
+          "const": "AnalogInput",
+          "default": "AnalogInput",
           "title": "Device Type",
           "type": "string"
         },
@@ -684,8 +684,8 @@
     "HarpBehavior": {
       "properties": {
         "device_type": {
-          "const": "behavior",
-          "default": "behavior",
+          "const": "Behavior",
+          "default": "Behavior",
           "title": "Device Type",
           "type": "string"
         },
@@ -747,8 +747,8 @@
     "HarpEnvironmentSensor": {
       "properties": {
         "device_type": {
-          "const": "environmentsensor",
-          "default": "environmentsensor",
+          "const": "EnvironmentSensor",
+          "default": "EnvironmentSensor",
           "title": "Device Type",
           "type": "string"
         },
@@ -807,11 +807,11 @@
       "title": "HarpEnvironmentSensor",
       "type": "object"
     },
-    "HarpLickometer": {
+    "HarpLicketySplit": {
       "properties": {
         "device_type": {
-          "const": "lickometer",
-          "default": "lickometer",
+          "const": "LicketySplit",
+          "default": "LicketySplit",
           "title": "Device Type",
           "type": "string"
         },
@@ -867,14 +867,14 @@
       "required": [
         "port_name"
       ],
-      "title": "HarpLickometer",
+      "title": "HarpLicketySplit",
       "type": "object"
     },
     "HarpWhiteRabbit": {
       "properties": {
         "device_type": {
-          "const": "whiterabbit",
-          "default": "whiterabbit",
+          "const": "WhiteRabbit",
+          "default": "WhiteRabbit",
           "title": "Device Type",
           "type": "string"
         },
@@ -1040,8 +1040,8 @@
     "LoadCells": {
       "properties": {
         "device_type": {
-          "const": "loadcells",
-          "default": "loadcells",
+          "const": "LoadCells",
+          "default": "LoadCells",
           "title": "Device Type",
           "type": "string"
         },
@@ -2257,14 +2257,14 @@
   },
   "properties": {
     "aind_behavior_services_pkg_version": {
-      "default": "0.9.0",
+      "default": "0.10.0",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
       "title": "aind_behavior_services package version",
       "type": "string"
     },
     "version": {
-      "const": "0.2.0",
-      "default": "0.2.0",
+      "const": "0.3.0",
+      "default": "0.3.0",
       "title": "Version",
       "type": "string"
     },
@@ -2299,7 +2299,7 @@
       "description": "Harp behavior"
     },
     "harp_lickometer": {
-      "$ref": "#/definitions/HarpLickometer",
+      "$ref": "#/definitions/HarpLicketySplit",
       "description": "Harp lickometer"
     },
     "harp_load_cells": {
@@ -2416,7 +2416,6 @@
     },
     "calibration": {
       "$ref": "#/definitions/RigCalibration",
-      "default": null,
       "description": "Load cells calibration"
     }
   },
@@ -2427,7 +2426,8 @@
     "harp_lickometer",
     "harp_load_cells",
     "harp_clock_generator",
-    "manipulator"
+    "manipulator",
+    "calibration"
   ],
   "title": "AindForceForagingRig",
   "type": "object"

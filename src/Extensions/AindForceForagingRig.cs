@@ -407,7 +407,7 @@ namespace AindForceForagingDataSchema.Rig
     public partial class AindManipulatorDevice
     {
     
-        private string _deviceType = "stepperdriver";
+        private string _deviceType = "StepperDriver";
     
         private AindManipulatorAdditionalSettings _additionalSettings;
     
@@ -1628,7 +1628,7 @@ namespace AindForceForagingDataSchema.Rig
     public partial class HarpAnalogInput
     {
     
-        private string _deviceType = "analoginput";
+        private string _deviceType = "AnalogInput";
     
         private BaseModel _additionalSettings;
     
@@ -1792,7 +1792,7 @@ namespace AindForceForagingDataSchema.Rig
     public partial class HarpBehavior
     {
     
-        private string _deviceType = "behavior";
+        private string _deviceType = "Behavior";
     
         private BaseModel _additionalSettings;
     
@@ -1956,7 +1956,7 @@ namespace AindForceForagingDataSchema.Rig
     public partial class HarpEnvironmentSensor
     {
     
-        private string _deviceType = "environmentsensor";
+        private string _deviceType = "EnvironmentSensor";
     
         private BaseModel _additionalSettings;
     
@@ -2117,10 +2117,10 @@ namespace AindForceForagingDataSchema.Rig
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class HarpLickometer
+    public partial class HarpLicketySplit
     {
     
-        private string _deviceType = "lickometer";
+        private string _deviceType = "LicketySplit";
     
         private BaseModel _additionalSettings;
     
@@ -2132,11 +2132,11 @@ namespace AindForceForagingDataSchema.Rig
     
         private string _portName;
     
-        public HarpLickometer()
+        public HarpLicketySplit()
         {
         }
     
-        protected HarpLickometer(HarpLickometer other)
+        protected HarpLicketySplit(HarpLicketySplit other)
         {
             _deviceType = other._deviceType;
             _additionalSettings = other._additionalSettings;
@@ -2242,14 +2242,14 @@ namespace AindForceForagingDataSchema.Rig
             }
         }
     
-        public System.IObservable<HarpLickometer> Process()
+        public System.IObservable<HarpLicketySplit> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpLickometer(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpLicketySplit(this)));
         }
     
-        public System.IObservable<HarpLickometer> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<HarpLicketySplit> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new HarpLickometer(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new HarpLicketySplit(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -2284,7 +2284,7 @@ namespace AindForceForagingDataSchema.Rig
     public partial class HarpWhiteRabbit
     {
     
-        private string _deviceType = "whiterabbit";
+        private string _deviceType = "WhiteRabbit";
     
         private BaseModel _additionalSettings;
     
@@ -2708,7 +2708,7 @@ namespace AindForceForagingDataSchema.Rig
     public partial class LoadCells
     {
     
-        private string _deviceType = "loadcells";
+        private string _deviceType = "LoadCells";
     
         private BaseModel _additionalSettings;
     
@@ -5708,9 +5708,9 @@ namespace AindForceForagingDataSchema.Rig
     public partial class AindForceForagingRig
     {
     
-        private string _aindBehaviorServicesPkgVersion = "0.9.0";
+        private string _aindBehaviorServicesPkgVersion = "0.10.0";
     
-        private string _version = "0.2.0";
+        private string _version = "0.3.0";
     
         private string _computerName;
     
@@ -5722,7 +5722,7 @@ namespace AindForceForagingDataSchema.Rig
     
         private HarpBehavior _harpBehavior = new HarpBehavior();
     
-        private HarpLickometer _harpLickometer = new HarpLickometer();
+        private HarpLicketySplit _harpLickometer = new HarpLicketySplit();
     
         private LoadCells _harpLoadCells = new LoadCells();
     
@@ -5736,7 +5736,7 @@ namespace AindForceForagingDataSchema.Rig
     
         private Screen _screen;
     
-        private RigCalibration _calibration;
+        private RigCalibration _calibration = new RigCalibration();
     
         public AindForceForagingRig()
         {
@@ -5881,7 +5881,7 @@ namespace AindForceForagingDataSchema.Rig
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Harp lickometer")]
-        public HarpLickometer HarpLickometer
+        public HarpLicketySplit HarpLickometer
         {
             get
             {
@@ -6005,7 +6005,7 @@ namespace AindForceForagingDataSchema.Rig
         /// Load cells calibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Load cells calibration")]
         public RigCalibration Calibration
         {
@@ -6355,9 +6355,9 @@ namespace AindForceForagingDataSchema.Rig
             return Process<HarpEnvironmentSensor>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<HarpLickometer> source)
+        public System.IObservable<string> Process(System.IObservable<HarpLicketySplit> source)
         {
-            return Process<HarpLickometer>(source);
+            return Process<HarpLicketySplit>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<HarpWhiteRabbit> source)
@@ -6506,7 +6506,7 @@ namespace AindForceForagingDataSchema.Rig
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpAnalogInput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpBehavior>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpEnvironmentSensor>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpLickometer>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpLicketySplit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpWhiteRabbit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellCalibrationInput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellCalibrationOutput>))]
